@@ -36,7 +36,7 @@ with col2:
 with col3:
     s_month = st.text_input('结算月:', placeholder='格式: 202401')
 with col4:
-    list_date = st.text_input('开始交易日期:', placeholder='例如: 20240120')
+    list_date = st.text_input('开始交易日期:', placeholder='格式: 20240120')
     # list_date = st.date_input('开始交易日期(格式: yyyymmdd):')
 with col5:
     delist_date = st.text_input('最后交易日期:', placeholder='例如: 20240120')
