@@ -19,7 +19,7 @@ st.title('退市期权合约查询 DO ARCHIVE')
 st.caption("© 2025 [樊沛涵]. https://github.com/caobianzi/DOArch")  # All rights reserved.
 # 获取当前脚本所在的目录
 current_path = os.path.dirname(os.path.abspath(__file__))
-# 获取当前脚本所在的项目根目录
+# 获取当前脚本所在的项目根目录：：
 root_path = os.path.dirname(current_path)
 doarch_engine = create_engine(r"sqlite:///" + root_path + "\\DOArch\\doarch.db")
 
@@ -34,7 +34,7 @@ with col1:
 with col2:
     call_put = st.selectbox('期权类型:', ('C', 'P', 'all'), key="callorput")
 with col3:
-    s_month = st.text_input('结算月:', placeholder='例如: 202401')
+    s_month = st.text_input('结算月:', placeholder='格式: 202401')
 with col4:
     list_date = st.text_input('开始交易日期:', placeholder='例如: 20240120')
     # list_date = st.date_input('开始交易日期(格式: yyyymmdd):')
