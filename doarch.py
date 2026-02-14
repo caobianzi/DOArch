@@ -16,7 +16,7 @@ st.set_page_config(
 )
 
 st.title('退市期权合约查询 DO ARCHIVE')
-st.caption("© 2025 [樊沛涵]. https://github.com/caobianzi/DO")  # All rights reserved.
+st.caption("© 2025 [樊沛涵]. https://github.com/caobianzi/DOArch")  # All rights reserved.
 # 获取当前脚本所在的目录
 current_path = os.path.dirname(os.path.abspath(__file__))
 # 获取当前脚本所在的项目根目录
