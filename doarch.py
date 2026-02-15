@@ -42,6 +42,7 @@ with col5:
     delist_date = st.text_input('最后交易日期:', placeholder='例如: 20240120')
 with col6:
     o_name = st.text_input('合约名称:')
+# yy= st.date_input('到期日:')
 
 repaint_button = st.button("已退市期权合约查询", disabled=False, use_container_width=True, type="primary")
 
@@ -101,7 +102,7 @@ if repaint_button:
 
 # # --- 数据更新区域 ---
 
-with st.expander("数据更新"):
+with st.expander("数据更新中。。。"):
     repaint_button_sh = st.button("更新上交所[退市]期权合约信息", disabled=False, use_container_width=True, type="primary")
     st.warning("按Tushare要求, 两次更新需间隔1分钟以上, 否则报错! ")
     repaint_button_sz = st.button("更新深交所[退市]期权合约信息", disabled=False, use_container_width=True, type="primary")
