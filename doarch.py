@@ -24,7 +24,7 @@ root_path = os.path.dirname(current_path)
 doarch_engine = create_engine(r"sqlite:///" + root_path + "\\DOArch\\doarch.db")
 
 token = 'test'
-# pro = ts.pro_api(token)
+pro = None #ts.pro_api(token)
 
 # st.set_page_config(layout="wide")  # layout="centered"  730px 内容居中，左右留白.旨在提升移动端和小屏设备的可读性
 
