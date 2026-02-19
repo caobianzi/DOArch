@@ -12,7 +12,7 @@ from sqlalchemy import create_engine
 st.set_page_config(
     page_title="DOArch-退市期权档案库",  # 网页标题
     page_icon="🔱",                   # 方案A：直接使用Emoji
-    layout="wide"                     # 风格
+    layout="wide"                     # 宽窄风格
 )
 
 st.title('退市期权合约查询 DO ARCHIVE')
