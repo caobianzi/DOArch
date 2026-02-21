@@ -12,7 +12,7 @@ from sqlalchemy import create_engine
 st.set_page_config(
     page_title="DOArch-退市期权档案库",  # 网页标题
     page_icon="🔱",                   # 方案A：直接使用Emoji
-    layout="wide"                     # 宽窄风格
+    layout="centered"                     # 宽窄风格：内容居中显示；layout="wide"：内容充满整个浏览器窗口
 )
 
 st.title('退市期权合约查询 DO ARCHIVE')
@@ -21,9 +21,9 @@ st.caption("© 2025 [樊沛涵]. https://github.com/caobianzi/DOArch")  # All ri
 current_path = os.path.dirname(os.path.abspath(__file__))
 # 获取当前脚本所在的项目根目录：：
 root_path = os.path.dirname(current_path)
-# doarch_engine = create_engine(r"sqlite:///" + root_path + "\\DOArch\\doarch.db")
 
-doarch_engine = create_engine(r"sqlite:///doarch.db?mode=ro", connect_args={'uri': True})
+# doarch_engine = create_engine(r"sqlite:///" + root_path + "\\DOArch\\doarch.db")  # 在本地运行时，按此配置数据库连接
+doarch_engine = create_engine(r"sqlite:///doarch.db?mode=ro", connect_args={'uri': True})  # 在streamlit cloud发布时，按此配置数据库连接
 
 token = 'test'
 pro = ts.pro_api(token)
