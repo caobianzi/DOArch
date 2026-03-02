@@ -36,12 +36,20 @@ with col1:
 with col2:
     call_put = st.selectbox('期权类型:', ('C', 'P', 'all'), key="callorput")
 with col3:
-    s_month = st.text_input('结算月:', placeholder='格式: 202401')
+    # 将文本输入改为日期选择，但只保留年月
+    s_month_date = st.date_input('结算月:', value=None, key="s_month_date")
+    # 将日期转换为需要的格式（YYYYMM）
+    s_month = s_month_date.strftime('%Y%m') if s_month_date else ""
 with col4:
-    list_date = st.text_input('开始交易日期:', placeholder='格式: 20240120')
-    # list_date = st.date_input('开始交易日期(格式: yyyymmdd):')
+    # 将文本输入改为日期选择
+    list_date_obj = st.date_input('开始交易日期:', value=None, key="list_date")
+    # 转换为需要的格式
+    list_date = list_date_obj.strftime('%Y%m%d') if list_date_obj else ""
 with col5:
-    delist_date = st.text_input('最后交易日期:', placeholder='例如: 20240120')
+    # 将文本输入改为日期选择
+    delist_date_obj = st.date_input('最后交易日期:', value=None, key="delist_date")
+    # 转换为需要的格式
+    delist_date = delist_date_obj.strftime('%Y%m%d') if delist_date_obj else ""
 with col6:
     o_name = st.text_input('合约名称:')
 # yy= st.date_input('到期日:')
@@ -79,10 +87,10 @@ if repaint_button:
     df_os = df_o[c1 & c2 & c3].copy()
 
     if list_date != '':  # 开始交易日 pd.to_datetime(list_date, format='%Y%m%d')
-        df_os = df_os[(df_os['list_date'] >= pd.to_datetime(list_date, format='%Y%m%d'))]
+        df_os = df_os[(df_os['list_date'] >= list_date_obj)]
 
     if delist_date != '':  # 最后交易日期
-        df_os = df_os[(df_os['delist_date'] <= pd.to_datetime(delist_date, format='%Y%m%d'))]
+        df_os = df_os[(df_os['delist_date'] <= delist_date_obj)]
 
     if o_name != '':  # 如果o_name不为空，筛选合约名称
         df_os = df_os[df_os['name'].str.contains(o_name, na=False)]
