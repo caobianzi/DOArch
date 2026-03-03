@@ -137,7 +137,7 @@ with st.expander("数据更新中。。。"):
             time.sleep(1)
 
         status_text.text("✅ 1分钟计时完成！")
-        st.balloons()
+        # st.balloons()
 
     if repaint_button_sz:
         sz_option_delisted = pro.opt_basic(exchange='SZSE', list_status='D')  # 深交所退市期权
@@ -157,6 +157,6 @@ with st.expander("数据更新中。。。"):
             time.sleep(1)
 
         status_text.text("✅ 1分钟计时完成！")
-        st.balloons()
+        # st.balloons()
 
 
