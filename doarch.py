@@ -132,7 +132,7 @@ with st.expander("数据更新中。。。"):
             # 更新进度条
             progress_bar.progress(progress)
             # 更新状态文本（显示剩余时间）
-            status_text.text(f"剩余时间: {60 - (i + 1)} 秒")
+            status_text.text(f"剩余时间为: {60 - (i + 1)} 秒")
             # 暂停 1 秒
             time.sleep(1)
 
