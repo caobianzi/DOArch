@@ -154,7 +154,7 @@ with st.expander("数据更新中。。。"):
             # 更新状态文本（显示剩余时间）
             status_text.text(f"剩余时间: {60 - (i + 1)} 秒")
             # 暂停 1 秒
-            time.sleep(1)
+            time.sleep(2)
 
         status_text.text("✅ 1分钟计时完成！")
         # st.balloons()
