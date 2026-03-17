@@ -12,58 +12,48 @@ from sqlalchemy import create_engine
 st.set_page_config(
     page_title="DOArch-退市期权档案库",  # 网页标题
     page_icon="🔱",                   # 方案A：直接使用Emoji
-    layout="centered"                     # 宽窄风格：内容居中显示；layout="wide"：内容充满整个浏览器窗口
+    layout="wide"
 )
 
 st.title('退市期权合约查询 DO ARCHIVE')
-st.caption("© 2026 [樊沛涵]. https://github.com/caobianzi/DOArch")  # All rights reserved.
+st.caption("© 2025 [樊沛涵]. https://github.com/caobianzi/DOArch")  # All rights reserved.
 # 获取当前脚本所在的目录
 current_path = os.path.dirname(os.path.abspath(__file__))
-# 获取当前脚本所在的项目根目录：：
+# 获取当前脚本所在的项目根目录
 root_path = os.path.dirname(current_path)
+doarch_engine = create_engine(r"sqlite:///" + root_path + "\\DOArch\\doarch.db")  # 本地数据引擎
+# doarch_engine = create_engine(r"doarch.db?mode=ro", connect_args={"uri": True})  # 在streamlit clound发布时，按此配置mode=ro为只读
 
-# doarch_engine = create_engine(r"sqlite:///" + root_path + "\\DOArch\\doarch.db")  # 在本地运行时，按此配置数据库连接
-doarch_engine = create_engine(r"sqlite:///doarch.db?mode=ro", connect_args={'uri': True})  # 在streamlit cloud发布时，按此配置数据库连接
-
-token = 'test'
+token = 'ec776ec032145e26891a3ef86941ca5ff938380e936ecef30f14cc08'
 pro = ts.pro_api(token)
 
 # st.set_page_config(layout="wide")  # layout="centered"  730px 内容居中，左右留白.旨在提升移动端和小屏设备的可读性
 
 col1, col2, col3, col4, col5, col6 = st.columns(6)
 with col1:
-    exchange = st.selectbox('🏢 交易所:', ('SSE', 'SZSE', 'all'), key="exchange_name")
+    exchange = st.selectbox('交易所:', ('SSE', 'SZSE', 'all'), key="exchange_name")
 with col2:
-    call_put = st.selectbox('📊期权类型:', ('C', 'P', 'all'), key="callorput")
+    call_put = st.selectbox('期权类型:', ('C', 'P', 'all'), key="callorput")
 with col3:
-    # 将文本输入改为日期选择，但只保留年月
-    s_month_date = st.date_input('📅结算月:', value=None, key="s_month_date")
-    # 将日期转换为需要的格式（YYYYMM）
-    s_month = s_month_date.strftime('%Y%m') if s_month_date else ""
+    s_month = st.text_input('结算月:', placeholder='例如: 202401')
 with col4:
-    # 将文本输入改为日期选择
-    list_date_obj = st.date_input('📆开始交易日期:', value=None, key="list_date")
-    # 转换为需要的格式
-    list_date = list_date_obj.strftime('%Y%m%d') if list_date_obj else ""
+    list_date = st.text_input('开始交易日期:', placeholder='例如: 20240120')
+    # list_date = st.date_input('开始交易日期(格式: yyyymmdd):')
 with col5:
-    # 将文本输入改为日期选择
-    delist_date_obj = st.date_input('📆最后交易日期:', value=None, key="delist_date")
-    # 转换为需要的格式
-    delist_date = delist_date_obj.strftime('%Y%m%d') if delist_date_obj else ""
+    delist_date = st.text_input('最后交易日期:', placeholder='例如: 20240120')
 with col6:
-    o_name = st.text_input('🔤合约名称:')
-# yy= st.date_input('到期日:')
+    o_name = st.text_input('合约名称:')
 
-repaint_button = st.button("🔍已退市期权合约查询", disabled=False, use_container_width=True, type="primary")
+repaint_button = st.button("已退市期权合约查询", disabled=False, use_container_width=True, type="primary")
 
 if repaint_button:
     df_sh = pd.read_sql("select * from option_contract_shanghai ;", doarch_engine)
     df_sz = pd.read_sql("select * from option_contract_shenzhen ;", doarch_engine)
     df_o = pd.concat([df_sh, df_sz], ignore_index=True)
-    df_o['list_date'] = pd.to_datetime(df_o['list_date']).dt.date
-    df_o['delist_date'] = pd.to_datetime(df_o['delist_date']).dt.date
-    df_o['last_edate'] = pd.to_datetime(df_o['last_edate']).dt.date
-    df_o['last_ddate'] = pd.to_datetime(df_o['last_ddate']).dt.date
+    df_o['list_date'] = pd.to_datetime(df_o['list_date'])#.dt.date
+    df_o['delist_date'] = pd.to_datetime(df_o['delist_date'])#.dt.date
+    df_o['last_edate'] = pd.to_datetime(df_o['last_edate'])#.dt.date
+    df_o['last_ddate'] = pd.to_datetime(df_o['last_ddate'])#.dt.date
 
     if exchange == 'SSE':
         c1 = (df_o['exchange'] == 'SSE')
@@ -87,10 +77,10 @@ if repaint_button:
     df_os = df_o[c1 & c2 & c3].copy()
 
     if list_date != '':  # 开始交易日 pd.to_datetime(list_date, format='%Y%m%d')
-        df_os = df_os[(df_os['list_date'] >= list_date_obj)]
+        df_os = df_os[(df_os['list_date'] >= pd.to_datetime(list_date, format="%Y%m%d"))]
 
     if delist_date != '':  # 最后交易日期
-        df_os = df_os[(df_os['delist_date'] <= delist_date_obj)]
+        df_os = df_os[(df_os['delist_date'] <= pd.to_datetime(delist_date, format='%Y%m%d'))]
 
     if o_name != '':  # 如果o_name不为空，筛选合约名称
         df_os = df_os[df_os['name'].str.contains(o_name, na=False)]
@@ -106,16 +96,16 @@ if repaint_button:
 
     st.dataframe(df_os)
     st.caption("数量:" + str(len(df_os)))
-    st.caption("📌已知300ETF期权最早于20191223上市交易，50ETF期权最早于20150209上市交易，创业板ETF期权最早于20220919上市交易，"
+    st.caption("300ETF期权最早于20191223上市交易，50ETF期权最早于20150209上市交易，创业板ETF期权最早于20220919上市交易，"
                "中证500ETF期权最早于20220919上市交易，科创板50ETF最早于20230605上市交易")
 
 
 # # --- 数据更新区域 ---
 
-with st.expander("数据更新中。。。"):
-    repaint_button_sh = st.button("📈更新上交所[退市]期权合约信息", disabled=False, use_container_width=True, type="primary")
+with st.expander("数据更新"):
+    repaint_button_sh = st.button("更新上交所[退市]期权合约信息", disabled=False, use_container_width=True, type="primary")
     st.warning("按Tushare要求, 两次更新需间隔1分钟以上, 否则报错! ")
-    repaint_button_sz = st.button("📉更新深交所[退市]期权合约信息", disabled=False, use_container_width=True, type="primary")
+    repaint_button_sz = st.button("更新深交所[退市]期权合约信息", disabled=False, use_container_width=True, type="primary")
 
     # df_o = pd.read_sql("select * from option_contract", con=gl.qf_finance_engine)
 
@@ -132,12 +122,12 @@ with st.expander("数据更新中。。。"):
             # 更新进度条
             progress_bar.progress(progress)
             # 更新状态文本（显示剩余时间）
-            status_text.text(f"⏳ 等待中... 剩余 {60 - (i + 1)} 秒")
+            status_text.text(f"剩余时间: {60 - (i + 1)} 秒")
             # 暂停 1 秒
             time.sleep(1)
 
         status_text.text("✅ 1分钟计时完成！")
-        # st.balloons()
+        st.balloons()
 
     if repaint_button_sz:
         sz_option_delisted = pro.opt_basic(exchange='SZSE', list_status='D')  # 深交所退市期权
@@ -154,8 +144,9 @@ with st.expander("数据更新中。。。"):
             # 更新状态文本（显示剩余时间）
             status_text.text(f"剩余时间: {60 - (i + 1)} 秒")
             # 暂停 1 秒
-            time.sleep(2)
+            time.sleep(1)
 
         status_text.text("✅ 1分钟计时完成！")
-        # st.balloons()
+        st.balloons()
+
 
