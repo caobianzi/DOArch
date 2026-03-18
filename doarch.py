@@ -23,7 +23,7 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(current_dir, "", "doarch.db")
 doarch_engine = create_engine(f"sqlite:///{os.path.normpath(db_path)}")
 
-token = 'ec776ec032145e26891a3ef86941ca5ff938380e936ecef30f14cc08'
+token = '*****************************'
 pro = ts.pro_api(token)
 
 # st.set_page_config(layout="wide")  # layout="centered"  730px 内容居中，左右留白.旨在提升移动端和小屏设备的可读性
