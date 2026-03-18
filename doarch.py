@@ -21,8 +21,8 @@ st.caption("© 2025 [樊沛涵]. https://github.com/caobianzi/DOArch")  # All ri
 current_path = os.path.dirname(os.path.abspath(__file__))
 # 获取当前脚本所在的项目根目录
 root_path = os.path.dirname(current_path)
-doarch_engine = create_engine(r"sqlite:///" + root_path + "\\DOArch\\doarch.db")  # 本地数据引擎
-# doarch_engine = create_engine(r"doarch.db?mode=ro", connect_args={"uri": True})  # 在streamlit clound发布时，按此配置mode=ro为只读
+# doarch_engine = create_engine(r"sqlite:///" + root_path + "\\DOArch\\doarch.db")  # 本地数据引擎
+doarch_engine = create_engine(r"doarch.db?mode=ro", connect_args={"uri": True})  # 在streamlit clound发布时，按此配置mode=ro为只读
 
 # token = 'ec776ec032145e26891a3ef86941ca5ff938380e936ecef30f14cc08'
 # pro = ts.pro_api(token)
