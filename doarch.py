@@ -28,9 +28,6 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 db_path = os.path.join(current_dir, "", "doarch.db")
 doarch_engine = create_engine(f"sqlite:///{os.path.normpath(db_path)}")
 
-st.caption(db_path)
-
-
 token = 'ec776ec032145e26891a3ef86941ca5ff938380e936ecef30f14cc08'
 pro = ts.pro_api(token)
 
